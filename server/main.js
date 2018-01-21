@@ -1,13 +1,21 @@
 const express = require('express')
+var mongoose = require('mongoose')
 const path = require('path')
 const webpack = require('webpack')
 const logger = require('../build/lib/logger')
 const webpackConfig = require('../build/webpack.config')
 const project = require('../project.config')
 const compress = require('compression')
+const bodyParser = require('body-parser')
+var cookieParser = require('cookie-parser');
+var url = require('./routes/url')
 
 const app = express()
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compress())
+app.use('/url', url)
 
 // ------------------------------------
 // Apply Webpack HMR Middleware
