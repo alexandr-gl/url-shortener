@@ -1,12 +1,12 @@
-var express = require('express');
-var router = express.Router();
-const https = require('https');
+var express = require('express')
+var router = express.Router()
+var config = require('../../project.config')
+var api = require('./api.js')
+var models = require('../models/urlmodel')
+const https = require('https')
 
-const url =
-  "https://maps.googleapis.com/maps/api/geocode/json?address=Florence";
-
-router.post('/', function(req, res, next) {
-    console.log('>>>!!!<<<', req.body);
+router.post('/', function(req, response, next) {
+    var shortURL;
     let formatURL = req.body.url;
     if(formatURL.indexOf('http') === -1) {
       formatURL = 'https://' + formatURL;
@@ -19,10 +19,35 @@ router.post('/', function(req, res, next) {
         body += data;
       });
       res.on("end", () => {
-        //body = JSON.parse(body);
-        console.log('>>> BODY', res.statusCode, res.statusMessage);
+        if (res.statusCode === 200 || res.statusCode === 302)
+        {
+          var newUrl = models.Url({
+            long_url: formatURL
+          })
+          //save link
+          newUrl.save(function(err){
+            if(err){
+              console.log(err)
+            }
+            // make short url
+            let index = models.Url.find({long_url: formatURL}, function(err, result){
+              if(err) {
+                console.log(err)
+              }
+              else {
+                console.log('RESULT', result[0].index, config.config.webhost, api.encode(result[0].index))
+                shortURL =  config.config.webhost + api.encode(result[0].index)
+                response.send({ 'shortURL': shortURL })
+                console.log('SHORT URL111', shortURL)
+              }
+            })
+            console.log('NEW URL', newUrl, index)
+
+            console.log('SHORT URL', shortURL)
+          })
+        }
       });
     });
 });
 
-module.exports = router;
+module.exports = router

@@ -1,0 +1,41 @@
+var alphabet = '123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ'
+var base = alphabet.length;
+var models = require('../models/urlmodel')
+
+// utility function to convert base 10 integer to base 58 string
+function encode(num){
+  var encoded = ''
+  console.log('NUM', num)
+  while (num) {
+    var remainder = num % base
+    num = Math.floor(num / base)
+    console.log(alphabet[remainder])
+    encoded = alphabet[remainder].toString() + encoded
+  }
+  return encoded
+}
+
+// utility function to convert a base 58 string to base 10 integer
+function decode(str){
+  var decoded = 0;
+  while (str){
+    var index = alphabet.indexOf(str[0]);
+    var power = str.length - 1;
+    decoded += index * (Math.pow(base, power));
+    str = str.substring(1);
+  }
+  return decoded;
+}
+//
+// function getNextSequence(urlCounter) {
+//   var ret = models.counter.findOneAndUpdate(
+//     { _id : urlCounter },
+//     { seq : 5000 }
+//   );
+//
+//   return ret.seq;
+// }
+
+module.exports.encode = encode;
+module.exports.decode = decode;
+// module.exports.getNextSequence = getNextSequence;

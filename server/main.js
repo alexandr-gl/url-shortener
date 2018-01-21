@@ -7,8 +7,10 @@ const webpackConfig = require('../build/webpack.config')
 const project = require('../project.config')
 const compress = require('compression')
 const bodyParser = require('body-parser')
-var cookieParser = require('cookie-parser');
+var cookieParser = require('cookie-parser')
 var url = require('./routes/url')
+var api = require('./routes/api')
+var Url = require('./models/urlmodel')
 
 const app = express()
 app.use(cookieParser()); // read cookies (needed for auth)
@@ -16,6 +18,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compress())
 app.use('/url', url)
+var Schema = mongoose.Schema;
+
+// create a connection to our MongoDB
+mongoose.connect('mongodb://' + project.config.db.host + '/' + project.config.db.name);
 
 // ------------------------------------
 // Apply Webpack HMR Middleware

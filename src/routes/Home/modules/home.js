@@ -11,7 +11,7 @@ export function shortURL(data) {
     console.log('>>>DATA<<<', data);
     axios.post('/url', data)
       .then(function (response) {
-        console.log('SUCCSESS');
+        console.log('SUCCSESS', response);
         const action = {
           type: SHORT_URL,
           payload: response.data
