@@ -9,6 +9,7 @@ export class HomeView extends React.Component {
     this.state = {
       url: ''
     }
+    // this.sendForm = this.sendForm.bind(this)
 
   }
 
@@ -17,13 +18,21 @@ export class HomeView extends React.Component {
     this.setState({url: event.target.value});
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log('NEXT PROPS', nextProps)
+    this.render();
+  }
+
   sendForm(event){
     event.preventDefault();
+    console.log("SEND FORM PROPS", this.props)
     shortURL(this.state);
   }
 
+
   render () {
     let btnText = 'SHORTEN URL';
+    console.log('RENDER PROPS', this.props)
     let customInput = <input type="text" className='shortener__form_input col-md-6' />;
     return (
       <div className='content'>

@@ -16,6 +16,7 @@ export function shortURL(data) {
           type: SHORT_URL,
           payload: response.data
         };
+        console.log('ACTION', action)
         return action;
       })
       .catch(function (error) {
@@ -24,14 +25,14 @@ export function shortURL(data) {
 }
 
 export const actions = {
-    shortURL
+  shortURL
 }
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 export const ACTION_HANDLERS = {
-  [SHORT_URL]    : (state, action) => {return Object.assign({},state,{data:action.payload})},
+  [SHORT_URL]    : (state, action) => state + action.payload,
 }
 
 
@@ -41,11 +42,10 @@ export const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-    something:'asdfasdfasdf'
-};
+  data : 'dfnjfgkfgokjfgkpj'
+}
 
-
-export default function counterReducer (state = initialState, action) {
+export default function urlReducer (state = initialState, action) {
     const handler = ACTION_HANDLERS[action.type]
 
     return handler ? handler(state, action) : state

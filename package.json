@@ -27,6 +27,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
     "mongoose": "^5.0.0",
+    "node-gyp": "^3.6.2",
     "object-assign": "^4.1.1",
     "promise": "^7.1.1",
     "prop-types": "^15.5.10",

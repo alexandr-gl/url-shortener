@@ -13,11 +13,11 @@ import HomeView from '../components/HomeView'
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapDispatchToProps = {
-    ...actions
+  ...actions
 }
 
 const mapStateToProps = (state) => ({
-    data: state.home.data
+  data: state.homeView.data
 })
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:

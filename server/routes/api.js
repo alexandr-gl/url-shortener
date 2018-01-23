@@ -5,7 +5,6 @@ var models = require('../models/urlmodel')
 // utility function to convert base 10 integer to base 58 string
 function encode(num){
   var encoded = ''
-  console.log('NUM', num)
   while (num) {
     var remainder = num % base
     num = Math.floor(num / base)
@@ -26,16 +25,6 @@ function decode(str){
   }
   return decoded;
 }
-//
-// function getNextSequence(urlCounter) {
-//   var ret = models.counter.findOneAndUpdate(
-//     { _id : urlCounter },
-//     { seq : 5000 }
-//   );
-//
-//   return ret.seq;
-// }
 
 module.exports.encode = encode;
 module.exports.decode = decode;
-// module.exports.getNextSequence = getNextSequence;
