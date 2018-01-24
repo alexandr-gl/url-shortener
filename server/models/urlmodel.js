@@ -1,9 +1,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var config = require('../../project.config')
+var api = require('../routes/api.js')
+var CronJob = require('cron').CronJob;
 
 // create the counters schema with an _id field and a seq field
 var CounterSchema = new Schema({
-  _id: {type: String, default: 'url_count' },
+  _id: { type: String, default: 'url_count' },
   seq: { type: Number, default: 0 }
 });
 
@@ -12,10 +15,10 @@ var counter = mongoose.model('counter', CounterSchema);
 
 // create a schema for our links
 var urlSchema = new Schema({
-  //_id: {type: Number, index: true},
   long_url: String,
   short_url: String,
   index: Number,
+  clicks: { type: Number, default: 0 },
   created_at: Date
 });
 
@@ -33,12 +36,26 @@ urlSchema.pre('save', function(next){
     if (error)
       return next(error);
     // set the _id of the urls collection to the incremented value of the counter
-    console.log('COUNTER', result, error);
-    doc.index = result.seq;
-    doc.created_at = new Date();
-    next();
-  });
-});
+    doc.index = result.seq
+    doc.short_url = config.config.webhost + api.encode(result.seq)
+    doc.created_at = new Date()
+    var myDate = new Date();
+
+    var dayOfMonth = myDate.getDate();
+    myDate.setDate(dayOfMonth + 15);
+    var job = new CronJob({
+      cronTime: myDate,
+      onTick: function() {
+        doc.findOneAndRemove({_id: doc._id}, function (){
+          console.log('Delete successfull')
+        })
+      },
+      start: false,
+      timeZone: 'America/Los_Angeles'
+    });
+    next()
+  })
+})
 
 
 var Url = mongoose.model('Url', urlSchema);

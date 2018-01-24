@@ -1,4 +1,5 @@
 const express = require('express')
+var models = require('./models/urlmodel')
 var mongoose = require('mongoose')
 const path = require('path')
 const webpack = require('webpack')
@@ -10,7 +11,6 @@ const bodyParser = require('body-parser')
 var cookieParser = require('cookie-parser')
 var url = require('./routes/url')
 var api = require('./routes/api')
-var Url = require('./models/urlmodel')
 
 const app = express()
 app.use(cookieParser()); // read cookies (needed for auth)
@@ -42,6 +42,19 @@ if (project.env === 'development') {
   app.use(require('webpack-hot-middleware')(compiler, {
     path: '/__webpack_hmr'
   }))
+
+  app.get('/:short_link', function (req, res) {
+    var base58Id = req.params.short_link;
+    var id = api.decode(base58Id);
+
+    // check if url already exists in database
+    models.Url.findOneAndUpdate({index: id}, {$inc: {clicks: 1}}, function (err, doc){
+      if (doc) {
+        // found an entry in the DB, redirect the user to their destination
+        res.redirect(doc.long_url);
+      }
+    });
+  });
 
   // Serve static assets from ~/public since Webpack is unaware of
   // these files. This middleware doesn't need to be enabled outside

@@ -17,3 +17,26 @@
   margin-bottom: 10px;
 }
 
+.url-table {
+  table-layout: fixed;
+}
+
+.url-table td{
+  text-overflow: ellipsis;
+  width: 20%;
+  overflow: hidden;
+}
+
+.first-th, .first-td {
+  width: 60%;
+}
+
+.last-th, .last-td {
+  width: 10%;
+  text-align: center;
+}
+
+a, a:hover {
+  text-decoration: none;
+  color: black;
+}
