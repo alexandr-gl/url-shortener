@@ -1,6 +1,5 @@
 // We only need to import the modules necessary for initial render
 import CoreLayout from '../layouts/PageLayout/PageLayout'
-import Home from './Home'
 import Shortener from './Shortener'
 
 /*  Note: Instead of using JSX, we recommend using react-router
