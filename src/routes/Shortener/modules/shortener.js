@@ -15,7 +15,7 @@ export const GET_URLS = 'GET_URLS'
 export function shortUrl(data) {
   console.log('CHECK DATA IN ACTION', data)
   return (dispatch) => {
-    return axios.post('/url/url', data)
+    return axios.post('/url', data)
       .then(function (response) {
         if(response.data === 'Link is busy')
         {
@@ -34,7 +34,7 @@ export function shortUrl(data) {
 
 export function getUrls() {
   return (dispatch) => {
-    return axios.get('/url/url')
+    return axios.get('/urls')
       .then(function (response){
         console.log('ACTION RESPONSE', response.data)
         dispatch({
