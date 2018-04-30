@@ -13,7 +13,6 @@ export const GET_URLS = 'GET_URLS'
     creating async actions, especially when combined with redux-thunk! */
 
 export function shortUrl(data) {
-  console.log('CHECK DATA IN ACTION', data)
   return (dispatch) => {
     return axios.post('/url', data)
       .then(function (response) {
@@ -36,7 +35,6 @@ export function getUrls() {
   return (dispatch) => {
     return axios.get('/urls')
       .then(function (response){
-        console.log('ACTION RESPONSE', response.data)
         dispatch({
           type    : GET_URLS,
           payload : response.data
