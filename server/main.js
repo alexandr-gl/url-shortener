@@ -17,7 +17,7 @@ app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compress())
-app.use('/url', url)
+app.use('/', url)
 var Schema = mongoose.Schema;
 
 // create a connection to our MongoDB
@@ -43,18 +43,18 @@ if (project.env === 'development') {
     path: '/__webpack_hmr'
   }))
 
-  app.get('/:short_link', function (req, res) {
-    var base58Id = req.params.short_link;
-    var id = api.decode(base58Id);
-
-    // check if url already exists in database
-    models.Url.findOneAndUpdate({index: id}, {$inc: {clicks: 1}}, function (err, doc){
-      if (doc) {
-        // found an entry in the DB, redirect the user to their destination
-        res.redirect(doc.long_url);
-      }
-    });
-  });
+  // app.get('/:short_link', function (req, res) {
+  //   var base58Id = req.params.short_link;
+  //   var id = api.decode(base58Id);
+  //
+  //   // check if url already exists in database
+  //   models.Url.findOneAndUpdate({index: id}, {$inc: {clicks: 1}}, function (err, doc){
+  //     if (doc) {
+  //       // found an entry in the DB, redirect the user to their destination
+  //       res.redirect(doc.long_url);
+  //     }
+  //   });
+  // });
 
   // Serve static assets from ~/public since Webpack is unaware of
   // these files. This middleware doesn't need to be enabled outside

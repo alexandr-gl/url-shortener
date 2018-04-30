@@ -7,16 +7,16 @@ const https = require('https')
 var url = require("url")
 var request = require('request');
 
-router.get('/url', function (req, res) {
+router.get('/urls', function (req, res) {
   return models.Url.find(function (err, result) {
     if(err || !result) {
       return res.send({error: 'Urls wasnt got'});
     }
     else {
-      res.send(result)
+      res.send(result);
     }
   })
-})
+});
 
 router.post('/url', function(req, res) {
   let formatURL = url.parse(req.body.url).href
@@ -58,11 +58,30 @@ else {
         models.Url.findOneAndUpdate({long_url: formatURL}, {$set: {short_url: req.body.shortUrl}}, function (err, result) {
           if (err) {res.send('Error. Can\'t change shorten url')}
           else {
-            res.send(result)
+            // res.send(result)
+            res.send('Save success')
           }
         })
       }
     })
+  }
+});
+
+router.get('/:short_link', function (req, res, next) {
+  if(req.params.short_link.indexOf('.') === -1) {
+    var base58Id = req.params.short_link;
+    var id = api.decode(base58Id);
+
+    // check if url already exists in database
+    models.Url.findOneAndUpdate({index: id}, {$inc: {clicks: 1}}, function (err, doc) {
+      if (doc) {
+        // found an entry in the DB, redirect the user to their destination
+        res.redirect(doc.long_url);
+      }
+    });
+  }
+  else {
+    next();
   }
 });
 
